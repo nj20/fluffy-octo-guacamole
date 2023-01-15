@@ -3,11 +3,18 @@ import jwt, { Secret } from "jsonwebtoken";
 import createError from "http-errors";
 
 export class User {
+  userId: string;
   username: string;
   salt: string;
   passwordHash: string;
 
-  constructor(username: string, salt: string, passwordHash: string = "") {
+  constructor(
+    userId: string,
+    username: string,
+    salt: string,
+    passwordHash: string
+  ) {
+    this.userId = userId;
     this.username = username;
     this.salt = salt;
     this.passwordHash = passwordHash;
@@ -21,7 +28,7 @@ export class User {
 
     return jwt.sign(
       {
-        username: this.username,
+        userId: this.userId,
         claims,
       },
       process.env.JWT_SECRET as Secret

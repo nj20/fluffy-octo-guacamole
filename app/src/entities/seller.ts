@@ -4,9 +4,9 @@ import { User } from "./user";
 
 export class Seller {
   user: User;
-  sellerId: String;
+  sellerId: string;
 
-  constructor(user: User, sellerId: String) {
+  constructor(user: User, sellerId: string) {
     this.user = user;
     this.sellerId = sellerId;
   }
@@ -18,7 +18,7 @@ export class Seller {
     return token;
   }
 
-  async toJSON() {
+  toJSON() {
     return {
       ...this.user.toJSON(),
       sellerId: this.sellerId,

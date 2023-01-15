@@ -4,10 +4,12 @@ import { User } from "./user";
 export class Buyer {
   user: User;
   deposit: number;
+  buyerId: string;
 
-  constructor(user: User, deposit: number) {
+  constructor(user: User, deposit: number, buyerId: string) {
     this.user = user;
     this.deposit = deposit;
+    this.buyerId = buyerId;
   }
 
   async getSessionToken(password: string) {
@@ -17,7 +19,7 @@ export class Buyer {
     return token;
   }
 
-  async toJSON() {
+  toJSON() {
     return {
       ...this.user.toJSON(),
     };

@@ -1,10 +1,10 @@
 import jwt, { Secret } from "jsonwebtoken";
 
 export const getRoleFromSessionToken = (token: string): string => {
-  const { role } = jwt.verify(token, process.env.JWT_SECRET as Secret) as {
-    role: string;
+  const parsedToken = jwt.verify(token, process.env.JWT_SECRET as Secret) as {
+    claims: { role: string };
   };
-  return role;
+  return parsedToken.claims.role;
 };
 
 //We can do more complex checks if necessary. For example, we can check if the username is a valid email address.

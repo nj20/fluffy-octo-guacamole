@@ -6,7 +6,6 @@ export const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      primaryKey: true,
     },
     passwordHash: {
       type: String,
@@ -21,6 +20,8 @@ export const userSchema = new Schema(
     strict: "throw",
   }
 );
+
+userSchema.index({ username: 1 }, { unique: true });
 
 export type UserSchema = InferSchemaType<typeof userSchema>;
 

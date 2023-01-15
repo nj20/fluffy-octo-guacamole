@@ -2,7 +2,9 @@ import createError from "http-errors";
 import {
   addBuyer as addBuyerToDb,
   doesBuyerExistWithUsername,
+  getBuyerById,
   getBuyerByUsername,
+  updateBuyer as updateBuyerInDb,
 } from "../repositories/buyer";
 import { Buyer } from "../entities/buyer";
 import { isPasswordAcceptable, isUsernameAcceptable } from "../utils/user";
@@ -27,6 +29,24 @@ export const getBuyer = async (username: string) => {
   if (buyer == null) {
     throw createError(404, "Buyer not found");
   }
+  return buyer;
+};
+
+export const updateBuyer = async (
+  buyerId: string,
+  updatedUserName: string,
+  updatedPassword: string
+) => {
+  const buyer = await getBuyerById(buyerId);
+  if (buyer == null) {
+    throw createError(404, "Buyer not found");
+  }
+
+  buyer.user.username = updatedUserName;
+  buyer.user.setPassword(updatedPassword);
+
+  await updateBuyerInDb(buyer);
+
   return buyer;
 };
 

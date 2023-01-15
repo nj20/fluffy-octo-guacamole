@@ -16,7 +16,6 @@ export const loadSellerFromSessionToken = async (sessionToken: string) => {
   const role = getRoleFromSessionToken(sessionToken);
   const user = await loadUserFromSessionToken(sessionToken);
   let seller = await getSellerByUsername(user.username);
-
   if (role !== USER_ROLES.SELLER || seller == null) {
     throw createError(401, "Unauthorized");
   }

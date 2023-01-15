@@ -1,9 +1,11 @@
 import { UserModel, UserSchema } from "../db/schemas/user";
 import { User } from "../entities/user";
 import { HydratedDocument } from "mongoose";
+import createError from "http-errors";
 
 export const addUser = async (user: User): Promise<User> => {
   const userDoc = new UserModel({
+    _id: user.userId,
     username: user.username,
     salt: user.salt,
     passwordHash: user.passwordHash,
@@ -21,13 +23,32 @@ export const getUserByUsername = async (
   return userDoc === null ? null : instantiateUserFromDoc(userDoc);
 };
 
-export const updateUser = async (user: User): Promise<boolean> => {
-  const userDoc = await UserModel.updateOne({
-    username: user.username,
-    salt: user.salt,
-    passwordHash: user.passwordHash,
+export const getUserById = async (userId: string): Promise<User | null> => {
+  const userDoc = await UserModel.findOne({
+    _id: userId,
   });
-  return userDoc.modifiedCount === 1;
+  return userDoc === null ? null : instantiateUserFromDoc(userDoc);
+};
+
+export const updateUser = async (user: User): Promise<boolean> => {
+  try {
+    const update = await UserModel.updateOne(
+      {
+        _id: user.userId,
+      },
+      {
+        username: user.username,
+        salt: user.salt,
+        passwordHash: user.passwordHash,
+      }
+    );
+    return update.modifiedCount === 1;
+  } catch (e: any) {
+    if (e.code === 11000) {
+      throw createError.BadRequest("User already exists");
+    }
+    return false;
+  }
 };
 
 export const doesUserExistWithUsername = async (
@@ -40,5 +61,10 @@ export const doesUserExistWithUsername = async (
 const instantiateUserFromDoc = (
   userDoc: HydratedDocument<UserSchema>
 ): User => {
-  return new User(userDoc.username, userDoc.salt, userDoc.passwordHash);
+  return new User(
+    userDoc.id,
+    userDoc.username,
+    userDoc.salt,
+    userDoc.passwordHash
+  );
 };

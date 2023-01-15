@@ -9,7 +9,7 @@ export const buyerSchema = new Schema(
       unique: true,
       primaryKey: true,
     },
-    username: {
+    userId: {
       type: String,
       ref: "User",
       required: true,
@@ -26,7 +26,7 @@ export const buyerSchema = new Schema(
   }
 );
 
-buyerSchema.index({ username: 1 }, { unique: true });
+buyerSchema.index({ userId: 1 }, { unique: true });
 
 export type BuyerSchema = InferSchemaType<typeof buyerSchema>;
 
