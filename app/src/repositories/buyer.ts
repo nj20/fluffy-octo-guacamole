@@ -2,6 +2,7 @@ import { BuyerModel, BuyerSchema } from "../db/schemas/buyer";
 import createError from "http-errors";
 import {
   addUser,
+  deleteUser,
   doesUserExistWithUsername,
   getUserById,
   getUserByUsername,
@@ -46,15 +47,13 @@ export const getBuyerByUsername = async (
 
 export const getBuyerById = async (buyerId: string): Promise<Buyer | null> => {
   const buyerDoc = await BuyerModel.findOne({
-    _id: buyerId,
+    buyerId: buyerId,
   });
   return buyerDoc == null ? null : await instantiateBuyerFromDoc(buyerDoc);
 };
 
 export const updateBuyer = async (buyer: Buyer): Promise<boolean> => {
-  if (!(await updateUser(buyer.user))) {
-    return false;
-  }
+  await updateUser(buyer.user);
   const update = await BuyerModel.updateOne(
     {
       buyerId: buyer.buyerId,
@@ -62,9 +61,18 @@ export const updateBuyer = async (buyer: Buyer): Promise<boolean> => {
     {
       buyerId: buyer.buyerId,
       userId: buyer.user.userId,
+      deposit: buyer.deposit,
     }
   );
   return update.upsertedCount === 1;
+};
+
+export const deleteBuyer = async (buyer: Buyer): Promise<boolean> => {
+  await deleteUser(buyer.user);
+  const deleteResult = await BuyerModel.deleteOne({
+    buyerId: buyer.buyerId,
+  });
+  return deleteResult.deletedCount === 1;
 };
 
 const instantiateBuyerFromDoc = async (
@@ -74,5 +82,5 @@ const instantiateBuyerFromDoc = async (
   if (user === null) {
     throw createError.NotFound("User not found");
   }
-  return new Buyer(user, buyerDoc.deposit, buyerDoc.id);
+  return new Buyer(user, buyerDoc.deposit, buyerDoc.buyerId.toString());
 };

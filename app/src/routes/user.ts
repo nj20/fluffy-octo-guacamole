@@ -3,11 +3,16 @@ import express, { Request, Response, NextFunction } from "express";
 
 import {
   createSessionTokenForBuyer,
+  deleteBuyer,
+  deposit,
+  purchaseProducts,
   registerBuyer,
+  resetDeposit,
   updateBuyer,
 } from "../controllers/buyer";
 import {
   createSessionTokenForSeller,
+  deleteSeller,
   registerSeller,
   updateSeller,
 } from "../controllers/seller";
@@ -56,7 +61,7 @@ router.patch(
     try {
       const seller = req.user as Seller;
       const updatedSeller = await updateSeller(
-        seller.sellerId,
+        seller,
         req.body.username,
         req.body.password
       );
@@ -66,6 +71,16 @@ router.patch(
     }
   }
 );
+
+router.delete("/seller", sellerAuthMiddleware, async function (req, res, next) {
+  try {
+    const seller = req.user as Seller;
+    await deleteSeller(seller);
+    res.status(204).send();
+  } catch (e) {
+    next(e);
+  }
+});
 
 router.post("/buyer", async function (req, res, next) {
   try {
@@ -107,11 +122,61 @@ router.patch(
     try {
       const buyer = req.user as Buyer;
       const updatedBuyer = await updateBuyer(
-        buyer.buyerId,
+        buyer,
         req.body.username,
         req.body.password
       );
       res.status(200).json(updatedBuyer.toJSON());
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+router.delete("/buyer", buyerAuthMiddleware, async function (req, res, next) {
+  try {
+    const buyer = req.user as Buyer;
+    await deleteBuyer(buyer);
+    res.status(204).send();
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post(
+  "/buyer/deposit",
+  buyerAuthMiddleware,
+  async function (req, res, next) {
+    try {
+      const coins = req.body.coins;
+      if (!Array.isArray(coins)) throw new Error("No coins to deposit");
+      const buyer = req.user as Buyer;
+      await deposit(buyer, coins);
+      res.status(201).json(buyer.toJSON());
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+router.post("/buyer/buy", buyerAuthMiddleware, async function (req, res, next) {
+  try {
+    const user = req.user as Buyer;
+    const reciept = await purchaseProducts(user, req.body.purchaseRequest);
+    res.status(201).json(reciept);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post(
+  "/buyer/reset",
+  buyerAuthMiddleware,
+  async function (req, res, next) {
+    try {
+      const user = req.user as Buyer;
+      await resetDeposit(user);
+      res.status(201).json(user.toJSON());
     } catch (e) {
       next(e);
     }

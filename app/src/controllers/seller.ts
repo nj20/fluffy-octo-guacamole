@@ -6,8 +6,10 @@ import {
   getSellerById,
   getSellerByUsername,
   updateSeller as updateSellerInDb,
+  deleteSeller as deleteSellerFromDb,
 } from "../repositories/seller";
 import { createNewSeller } from "../factories/seller";
+import { getProductsForSeller } from "../repositories/product";
 
 export const registerSeller = async (
   username: string,
@@ -32,21 +34,22 @@ export const getSeller = async (username: string) => {
 };
 
 export const updateSeller = async (
-  sellerId: string,
+  seller: Seller,
   updatedUserName: string,
   updatedPassword: string
 ) => {
-  const seller = await getSellerById(sellerId);
-  if (seller == null) {
-    throw createError(404, "Seller not found");
-  }
-
   seller.user.username = updatedUserName;
   seller.user.setPassword(updatedPassword);
-
   await updateSellerInDb(seller);
-
   return seller;
+};
+
+export const deleteSeller = async (seller: Seller) => {
+  const products = await getProductsForSeller(seller.sellerId);
+  if (products.length > 0) {
+    throw createError(400, "Seller has products");
+  }
+  await deleteSellerFromDb(seller);
 };
 
 export const createSessionTokenForSeller = async (

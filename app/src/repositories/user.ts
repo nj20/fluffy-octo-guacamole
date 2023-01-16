@@ -51,6 +51,13 @@ export const updateUser = async (user: User): Promise<boolean> => {
   }
 };
 
+export const deleteUser = async (user: User): Promise<boolean> => {
+  const deleteResult = await UserModel.deleteOne({
+    _id: user.userId,
+  });
+  return deleteResult.deletedCount === 1;
+};
+
 export const doesUserExistWithUsername = async (
   username: string
 ): Promise<boolean> => {

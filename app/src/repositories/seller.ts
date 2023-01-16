@@ -2,6 +2,7 @@ import { SellerModel, SellerSchema } from "../db/schemas/seller";
 import createError from "http-errors";
 import {
   addUser,
+  deleteUser,
   doesUserExistWithUsername,
   getUserById,
   getUserByUsername,
@@ -48,15 +49,13 @@ export const getSellerById = async (
   sellerId: string
 ): Promise<Seller | null> => {
   const sellerDoc = await SellerModel.findOne({
-    _id: sellerId,
+    sellerId: sellerId,
   });
   return sellerDoc == null ? null : await instantiateSellerFromDoc(sellerDoc);
 };
 
 export const updateSeller = async (seller: Seller): Promise<boolean> => {
-  if (!(await updateUser(seller.user))) {
-    return false;
-  }
+  await updateUser(seller.user);
   const update = await SellerModel.updateOne(
     {
       sellerId: seller.sellerId,
@@ -69,6 +68,14 @@ export const updateSeller = async (seller: Seller): Promise<boolean> => {
   return update.upsertedCount === 1;
 };
 
+export const deleteSeller = async (seller: Seller): Promise<boolean> => {
+  await deleteUser(seller.user);
+  const deleteResult = await SellerModel.deleteOne({
+    sellerId: seller.sellerId,
+  });
+  return deleteResult.deletedCount === 1;
+};
+
 const instantiateSellerFromDoc = async (
   sellerDoc: HydratedDocument<SellerSchema>
 ): Promise<Seller> => {
@@ -76,5 +83,5 @@ const instantiateSellerFromDoc = async (
   if (user === null) {
     throw createError.NotFound("User not found");
   }
-  return new Seller(user, sellerDoc.id);
+  return new Seller(user, sellerDoc.sellerId.toString());
 };

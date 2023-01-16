@@ -8,6 +8,7 @@ require("./db/mongodb-client");
 
 import indexRouter from "./routes/index";
 import userRouter from "./routes/user";
+import productRouter from "./routes/product";
 
 let app = express();
 
@@ -23,6 +24,7 @@ app.use(bearerToken());
 //App Routes
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+app.use("/product", productRouter);
 
 /*//For the excercise, always throwing 500 for simplicity
 app.use((err: any, req: any, res: any, next: any) => {
