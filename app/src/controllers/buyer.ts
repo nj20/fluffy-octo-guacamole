@@ -47,7 +47,7 @@ export const updateBuyer = async (
   updatedUserName: string,
   updatedPassword: string
 ) => {
-  buyer.user.username = updatedUserName;
+  buyer.user.setUsername(updatedUserName);
   buyer.user.setPassword(updatedPassword);
   await updateBuyerInDb(buyer);
   return buyer;

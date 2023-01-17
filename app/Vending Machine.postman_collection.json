@@ -1,0 +1,800 @@
+{
+	"info": {
+		"_postman_id": "5c7fa2d6-dedf-43f6-b77f-bbbb401d4d2b",
+		"name": "Vending Machine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Seller",
+			"item": [
+				{
+					"name": "Create Seller",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"example_seller_name\",\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/seller",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"seller"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login As Seller",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var token = pm.response.json().token;",
+									"pm.collectionVariables.set(\"seller_1_access_token\", token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/example_seller_name/seller/session",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"example_seller_name",
+								"seller",
+								"session"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Seller Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/user/seller",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"seller"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Seller",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/seller",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"seller"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Seller Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"example_seller_name_4\",\n    \"password\": \"updated_password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/seller",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"seller"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create a product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var productId = pm.response.json().productId;",
+									"pm.collectionVariables.set(\"product_id_1\", productId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_1\",\n    \"cost\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a product - 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var productId = pm.response.json().productId;",
+									"pm.collectionVariables.set(\"product_id_2\", productId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_2\",\n    \"cost\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a product - 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var productId = pm.response.json().productId;",
+									"pm.collectionVariables.set(\"product_id_3\", productId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_3\",\n    \"cost\": 25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_2\",\n    \"cost\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product/{{product_id_1}}",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product",
+								"{{product_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M1NDk0ODJlZjVjNjViYWI5ZmZkNmMiLCJjbGFpbXMiOnsicm9sZSI6IlNFTExFUiJ9LCJpYXQiOjE2NzM4NzM3Mzh9.OGQqLUqvS2WOIkXZce0Goe4cHT33Tk5McvH36nLwnSU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_2\",\n    \"cost\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_5\",\n    \"cost\": 5,\n    \"amountAvailable\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product/{{product_id_1}}",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product",
+								"{{product_id_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{seller_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"product_Name_2\",\n    \"cost\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/product/{{product_id_2}}",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"product",
+								"{{product_id_2}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buyer",
+			"item": [
+				{
+					"name": "Create Buyer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"example_buyer_name_1\",\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login As Buyer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var token = pm.response.json().token;",
+									"pm.collectionVariables.set(\"buyer_1_access_token\", token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/example_buyer_name/buyer/session",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"example_buyer_name",
+								"buyer",
+								"session"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit Coins",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{buyer_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"coins\": [5, 5, 50]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer/deposit",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{buyer_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchaseRequest\": {\n        \"{{product_id_3}}\": 5,\n        \"{{product_id_2}}\": 1\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer/buy",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Buyer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{buyer_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test2\",\n    \"password\": \"test3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete buyer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{buyer_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"pasword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{buyer_1_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchaseRequest\": {\n        \"63c5582c7f5a4dfd17b5469a\": 5,\n        \"63c558397f5a4dfd17b546a9\": 1\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/user/buyer/reset",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user",
+								"buyer",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "buyer_1_access_token",
+			"value": ""
+		},
+		{
+			"key": "seller_1_access_token",
+			"value": ""
+		},
+		{
+			"key": "product_id_2",
+			"value": ""
+		},
+		{
+			"key": "product_id_3",
+			"value": ""
+		},
+		{
+			"key": "product_id_1",
+			"value": ""
+		}
+	]
+}

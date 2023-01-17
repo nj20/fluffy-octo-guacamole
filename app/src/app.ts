@@ -26,10 +26,10 @@ app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 
-/*//For the excercise, always throwing 500 for simplicity
+//For the excercise, always throwing 500 for simplicity
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err.stack);
   res.status(400).send(err.message);
 });
-*/
+
 export default app;
